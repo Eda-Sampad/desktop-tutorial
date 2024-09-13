@@ -29,33 +29,33 @@ class AlexNet(nn.Module):
         self.feature = nn.Sequential(
             # Define feature extractor here...
 	    nn.Conv2d(1, 32, kernel_size=5, stride=1, padding=1),  # Input: 1x28x28 -> Output: 32x26x26
-            nn.ReLU(),
+            nn.ReLU(inplace=True),
             nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),  # Output: 64x26x26
-            nn.ReLU(),
+            nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),  # Output: 64x13x13
             nn.Conv2d(64, 96, kernel_size=3, stride=1, padding=1),  # Output: 96x13x13
-            nn.ReLU(),
+            nn.ReLU(inplace=True),
             nn.Conv2d(96, 64, kernel_size=3, stride=1, padding=1),  # Output: 64x13x13
-            nn.ReLU(),
+            nn.ReLU(inplace=True),
             nn.Conv2d(64, 32, kernel_size=3, stride=1, padding=1),  # Output: 32x13x13
-            nn.ReLU(),
+            nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2)  # Output: 32x6x6
-            )
+        )
         self.classifier = nn.Sequential(
             # Define classifier here...
             nn.Dropout(),
             nn.Linear(32 * 6 * 6, 2048),
-            nn.ReLU(),
+            nn.ReLU(inplace=True),
             nn.Dropout(),
             nn.Linear(2048, 1024),
-            nn.ReLU(),
+            nn.ReLU(inplace=True),
             nn.Linear(1024, 10)  # Output: 10 classes, even for binary classification
-            )
+        )
     
     def forward(self, x):
         # define forward network 'x' that combines feature extractor and classifier
         x = self.feature(x)
-        x = x.view(x.size(0), -1)  # Flatten the tensor
+        x = x.view(-1,32 * 6 * 6)  # Flatten the tensor
         x = self.classifier(x)
         return x
 
